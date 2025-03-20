@@ -1,9 +1,11 @@
 {
   "name": "vscode-rainbow-comments",
+  "version": "1.0.1",
   "displayName": "Rainbow Comments",
   "description": "Really very simple VSCode extension for structuring code with comments",
   "icon": "icon.png",
-  "version": "1.0.1",
+  "author": "Giraaffes",
+  "repository": "github:Giraaffes/vscode-rainbow-comments",
 
   "engines": {
     "vscode": "^1.98.0"
