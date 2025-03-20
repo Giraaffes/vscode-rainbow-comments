@@ -11,9 +11,9 @@ function refresh() {
 
 export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(
-		vscode.commands.registerCommand('rainbow-comments.helloWorld', () => {
-			vscode.window.showInformationMessage('Hello World from rainbow-comments!');
-		}),
+		//vscode.commands.registerCommand('vscode-rainbow-comments.helloWorld', () => {
+		//	vscode.window.showInformationMessage('Hello World from rainbow-comments!');
+		//}),
 		vscode.window.onDidChangeActiveTextEditor(refresh),
 		vscode.workspace.onDidChangeTextDocument(refresh) // todo debounce?
 	);

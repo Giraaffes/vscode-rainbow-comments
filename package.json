@@ -1,22 +1,17 @@
 {
-  "name": "rainbow-comments",
-  "displayName": "rainbow-comments",
-  "description": "",
-  "version": "1.0.0",
+  "name": "vscode-rainbow-comments",
+  "displayName": "Rainbow Comments",
+  "description": "Really very simple VSCode extension for structuring code with comments",
+  "icon": "icon.png",
+  "version": "1.0.1",
+
   "engines": {
     "vscode": "^1.98.0"
   },
   "activationEvents": [
     "onLanguage:javascript"
   ],
-  "contributes": {
-    "commands": [
-      {
-        "command": "rainbow-comments.helloWorld",
-        "title": "Hello World"
-      }
-    ]
-  },
+
   "main": "./out/extension.js",
   "scripts": {
     "vscode:prepublish": "npm run compile",
@@ -26,9 +21,7 @@
   "devDependencies": {
     "@types/node": "20.x",
     "@types/vscode": "^1.98.0",
-    "typescript": "^5.7.3"
-  },
-  "dependencies": {
+    "typescript": "^5.7.3",
     "@vscode/vsce": "^3.3.0"
   }
 }

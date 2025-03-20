@@ -49,13 +49,6 @@ export function getSectionDecorator(sectionIndex: number): SectionDecorator {
 	}
 }
 
-//export function clear(editor: vscode.TextEditor) {
-//	for (let decorator of sectionDecoratorsCache) {
-//		editor.setDecorations(decorator.headerDecoration, []);
-//		editor.setDecorations(decorator.sectionDecoration, []);
-//	}
-//}
-
 export function applyDecorators(editor: vscode.TextEditor, sections: parser.DocumentSection[]) {
 	let toSet = Math.max(sectionDecoratorsCache.length, sections.length);
 	for (let i = 0; i < toSet; i++) {
