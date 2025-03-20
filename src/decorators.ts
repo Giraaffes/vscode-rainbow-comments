@@ -26,7 +26,7 @@ const palette = [
 
 export type SectionDecorator = {
 	headerDecoration: vscode.TextEditorDecorationType,
-	sectionDecoration: vscode.TextEditorDecorationType
+	sectionDecoration?: vscode.TextEditorDecorationType
 }
 
 let sectionDecoratorsCache = [] as SectionDecorator[];
@@ -35,13 +35,23 @@ export function getSectionDecorator(sectionIndex: number): SectionDecorator {
 	if (cached) {
 		return cached;
 	} else {
-		let sectionColor = palette[sectionIndex % palette.length];
-		let headerDecoration = vscode.window.createTextEditorDecorationType({
-			...headerDecorationDefaults, color: sectionColor
-		})
-		let sectionDecoration = vscode.window.createTextEditorDecorationType({
-			...sectionDecorationDefaults, overviewRulerColor: sectionColor + "80"
-		});
+		let headerDecoration: vscode.TextEditorDecorationType;
+		let sectionDecoration: vscode.TextEditorDecorationType | undefined;
+
+		if (sectionIndex > 0) {
+			let sectionColor = palette[(sectionIndex - 1) % palette.length];
+			headerDecoration = vscode.window.createTextEditorDecorationType({
+				...headerDecorationDefaults, color: sectionColor
+			})
+			sectionDecoration = vscode.window.createTextEditorDecorationType({
+				...sectionDecorationDefaults, overviewRulerColor: sectionColor + "80"
+			});
+		} 
+		else {
+			headerDecoration = vscode.window.createTextEditorDecorationType({
+				...headerDecorationDefaults, color: "#ffffff"
+			})
+		}
 
 		let decorator = {headerDecoration, sectionDecoration} as SectionDecorator;
 		sectionDecoratorsCache[sectionIndex] = decorator;
@@ -56,12 +66,15 @@ export function applyDecorators(editor: vscode.TextEditor, sections: parser.Docu
 		if (i < sections.length) {
 			let section = sections[i];
 			editor.setDecorations(decorator.headerDecoration, section.headerRanges);
-			editor.setDecorations(decorator.sectionDecoration, [new vscode.Range(
-				section.startLine, 0, section.endLine, 1
-			)]);
-		} else {
+			if (decorator.sectionDecoration) {
+				editor.setDecorations(decorator.sectionDecoration, [new vscode.Range(
+					section.startLine, 0, section.endLine, 1
+				)]);
+			}
+		} 
+		else {
 			editor.setDecorations(decorator.headerDecoration, []);
-			editor.setDecorations(decorator.sectionDecoration, []);
+			if (decorator.sectionDecoration) editor.setDecorations(decorator.sectionDecoration, []);
 		}
 	}
 }

@@ -20,8 +20,8 @@ function getLineContentRange(line: number, lineText: string): vscode.Range {
 const sectionStartRegex = /^\s*\/\/\/\s+(\S.*?)\s*$/;
 const sectionContinueRegex = /^\s*\/\/>\s+(\S.*?)\s*$/;
 export function parseDocumentSections(document: vscode.TextDocument) {
-	let sections = [] as DocumentSection[];
-	let currentSection: DocumentSection;
+	let currentSection = {startLine: 0, endLine: 0, headerRanges: []} as DocumentSection;
+	let sections = [currentSection] as DocumentSection[];
 
 	let text = document.getText();
 	for (let [ line, lineText ] of text.split("\n").entries()) {
@@ -32,10 +32,12 @@ export function parseDocumentSections(document: vscode.TextDocument) {
 				headerRanges: [getLineContentRange(line, lineText)]
 			};
 			sections.push(currentSection);
-		} else if (currentSection && lineText.match(sectionContinueRegex)) {
+		} 
+		else if (lineText.match(sectionContinueRegex)) {
 			currentSection.headerRanges.push(getLineContentRange(line, lineText));
 			currentSection.endLine = line;
-		} else if (currentSection && lineText.trim() != "") {
+		} 
+		else if (lineText.trim() != "") {
 			currentSection.endLine = line;
 		}
 	}
