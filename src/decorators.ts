@@ -9,7 +9,7 @@ const headerDecorationDefaults = {
 } as vscode.DecorationRenderOptions;
 
 const sectionDecorationDefaults = {
-	overviewRulerLane: vscode.OverviewRulerLane.Right
+	overviewRulerLane: vscode.OverviewRulerLane.Center
 } as vscode.DecorationRenderOptions;
 
 const palette = [
