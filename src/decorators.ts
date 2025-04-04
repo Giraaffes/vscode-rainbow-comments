@@ -5,7 +5,6 @@ import * as parser from "./parser";
 const headerDecorationDefaults = {
 	rangeBehavior: vscode.DecorationRangeBehavior.ClosedClosed,
 	fontWeight: "600"
-
 } as vscode.DecorationRenderOptions;
 
 const sectionDecorationDefaults = {
@@ -30,15 +29,22 @@ export type SectionDecorator = {
 }
 
 let sectionDecoratorsCache = [] as SectionDecorator[];
-export function getSectionDecorator(sectionIndex: number): SectionDecorator {
+export function getSectionDecorator(sectionIndex: number): SectionDecorator 
+{
 	let cached = sectionDecoratorsCache[sectionIndex];
 	if (cached) {
 		return cached;
-	} else {
+	} 
+	else {
 		let headerDecoration: vscode.TextEditorDecorationType;
 		let sectionDecoration: vscode.TextEditorDecorationType | undefined;
 
-		if (sectionIndex > 0) {
+		if (sectionIndex == 0) {
+			headerDecoration = vscode.window.createTextEditorDecorationType({
+				...headerDecorationDefaults, color: "#ffffff"
+			})
+		}
+		else {
 			let sectionColor = palette[(sectionIndex - 1) % palette.length];
 			headerDecoration = vscode.window.createTextEditorDecorationType({
 				...headerDecorationDefaults, color: sectionColor
@@ -46,11 +52,6 @@ export function getSectionDecorator(sectionIndex: number): SectionDecorator {
 			sectionDecoration = vscode.window.createTextEditorDecorationType({
 				...sectionDecorationDefaults, overviewRulerColor: sectionColor + "80"
 			});
-		} 
-		else {
-			headerDecoration = vscode.window.createTextEditorDecorationType({
-				...headerDecorationDefaults, color: "#ffffff"
-			})
 		}
 
 		let decorator = {headerDecoration, sectionDecoration} as SectionDecorator;
@@ -59,7 +60,8 @@ export function getSectionDecorator(sectionIndex: number): SectionDecorator {
 	}
 }
 
-export function applyDecorators(editor: vscode.TextEditor, sections: parser.DocumentSection[]) {
+export function applyDecorators(editor: vscode.TextEditor, sections: parser.DocumentSection[]) 
+{
 	let toSet = Math.max(sectionDecoratorsCache.length, sections.length);
 	for (let i = 0; i < toSet; i++) {
 		let decorator = getSectionDecorator(i);
@@ -76,5 +78,13 @@ export function applyDecorators(editor: vscode.TextEditor, sections: parser.Docu
 			editor.setDecorations(decorator.headerDecoration, []);
 			if (decorator.sectionDecoration) editor.setDecorations(decorator.sectionDecoration, []);
 		}
+	}
+}
+
+export function clearDecorators(editor: vscode.TextEditor)
+{
+	for (let decorator of sectionDecoratorsCache) {
+		editor.setDecorations(decorator.headerDecoration, []);
+		if (decorator.sectionDecoration) editor.setDecorations(decorator.sectionDecoration, []);
 	}
 }
